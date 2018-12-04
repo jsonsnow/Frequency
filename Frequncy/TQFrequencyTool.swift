@@ -9,93 +9,59 @@
 import Foundation
 
 let userDefault = UserDefaults.standard
-
+public typealias TQNextTimeQueryHandler = () -> Double
 
 public class TQFrequencyTool: NSObject {
-    
-    public typealias TQNextTimeQueryHandler = () -> Double
-    
-//    static public func handlerFrequency(_ frequency:Int32, interval: TimeInterval, saveKey: String) -> Void {
-//        let frequncy: Frequncy? = getCustomerObject(Frequncy.self, key: saveKey)
-//        if  let _frequncy = frequncy {
-//            _frequncy.interval = interval
-//            _frequncy.frequncy = frequency
-//            _frequncy.handlerActionWithIntervalType()
-//            saveCustomer(object: _frequncy, key: saveKey)
-//
-//        } else {
-//            let curFre = Frequncy(fre: frequency, cur: 1, inter: interval, save: Date.init().timeIntervalSince1970, next: 0)
-//            saveCustomer(object: curFre, key: saveKey)
-//        }
-//    }
-//
-//    static public func queryFrequencyStatus(saveKey: String) -> Bool {
-//        let frequncy: Frequncy? = getCustomerObject(Frequncy.self, key: saveKey)
-//        if  let _frequncy = frequncy {
-//            let res = _frequncy.canShowWithIntervalType()
-//            return res
-//
-//        } else {
-//            return true
-//        }
-//    }
-//
-//    static public func handlerFrequencyWithNextimeType(_ frequency:Int32, saveKey: String, query: TQNextTimeQueryHandler) -> Void {
-//        let frequncy: Frequncy? = getCustomerObject(Frequncy.self, key: saveKey)
-//        if  let _frequncy = frequncy {
-//            _frequncy.frequncy = frequency
-//            _frequncy.handlerActionWithNextTimeType(query: query)
-//            saveCustomer(object: _frequncy, key: saveKey)
-//
-//        } else {
-//            let curFre = Frequncy(fre: frequency, cur: 1, inter: 0, save: Date.init().timeIntervalSince1970, next: query())
-//            saveCustomer(object: curFre, key: saveKey)
-//        }
-//    }
-//
-//    static public func queryFrequencyStatusWithNexttimeType(saveKey: String) -> Bool {
-//        let frequncy = getCustomerObject(Frequncy.self, key: saveKey)
-//        if  let _frequncy = frequncy {
-//            let res = _frequncy.canShowWithNextTimeType()
-//            return res
-//
-//        } else {
-//            return true
-//        }
-//    }
-    
+
+    static public var frequencyDatas = [String: Frequncy]()
     static public func queryFrequencyStatus<Object>(frequcy: Object) -> Bool where Object: FrequncySaveAble, Object: FrequncyAble {
-        let frequncy: Frequncy = getCustomerObject(Frequncy.self, key: "saveKey")
-            if  let _frequncy = frequncy {
-                let res = _frequncy.canShowWithNextTimeType()
-                return res
-            } else {
-                    return true
-            }
+        let saveData = userDefault.dictionary(forKey: frequcy.saveKey)
+        guard let data = saveData else { return true }
+        frequcy.synchData(frequcyDict: data)
+        return frequcy.canShow()
+    }
+    
+    static public func handlerFrequencyStatus<Object>(frequcy: Object) where Object: FrequncySaveAble, Object: FrequncyAble {
+       frequcy.handlePlusCurFrequncyEvent(query: nil)
+        userDefault.set(frequcy.value, forKey: frequcy.saveKey)
     }
     
 }
 
 extension TQFrequencyTool {
     
-    @objc static public func handlerDayFrequency(_ frequency: Int32) -> Void {
-        handlerFrequency(2, interval: 24 * 60 * 60, saveKey: "day_frequency")
-    }
-    
-    @objc static public func queryDayFrequencyStatus() -> Bool {
-        return queryFrequencyStatus(saveKey: "day_frequency")
-    }
-    
-    @objc static public func handNextDayFrequency(_ frequency: Int32) -> Void {
-        handlerFrequencyWithNextimeType(2, saveKey: "next_day_frequency") {
-            let date = Date.init()
-            let next = date.nextDayDate()
-            return next.timeIntervalSince1970
+    @objc static public func handlerDayFrequency(_ frequency: Int32, saveKey: String) -> Void {
+        if let model = TQFrequencyTool.frequencyDatas[saveKey] {
+            handlerFrequencyStatus(frequcy: model)
+        } else {
+            let model = Frequncy.dayFrequency(fre: frequency, type: .interval(24 * 60 * 60), saveKey: saveKey) {
+                let date = Date.init()
+                return date.nextDayDate().timeIntervalSince1970
+            }
+            TQFrequencyTool.frequencyDatas[saveKey] = model
         }
     }
-    
-    @objc static public func queryNextTypeDayFrequency() -> Bool {
-        return queryFrequencyStatusWithNexttimeType(saveKey: "next_day_frequency")
+
+//    @objc static public func queryStatus(saveKey: String) -> Bool {
+//        
+//    }
+
+    @objc static public func handNextDayFrequency(_ frequency: Int32, saveKey: String) -> Void {
+        handlerFrequencyStatus(frequcy: Frequncy.dayFrequency(fre: frequency, type: .nextTime(24 * 60 * 60), saveKey: saveKey,query: { () -> Double in
+            let date = Date.init()
+            return date.nextDayDate().timeIntervalSince1970
+        }))
+    }
+}
+
+extension Frequncy {
+    class func dayFrequency(fre: Int32, type: FrequncyType, saveKey: String, query: @escaping TQNextTimeQueryHandler) -> Frequncy {
+        let frequency = Frequncy.init()
+        frequency.frequncy = fre
+        frequency.type = type
+        frequency.saveKey = saveKey
+        frequency.queryNextTime = query
+        return frequency
     }
 }
 
@@ -128,11 +94,6 @@ fileprivate func getCustomerObject<T>(_ objectName: T.Type, key: String) -> T? w
     return nil
 }
 
-extension Date {
-    func currentTimeNextDay() -> Date {
-        return Date.init()
-    }
-}
 
 
 
