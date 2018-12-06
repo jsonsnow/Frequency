@@ -19,7 +19,7 @@ let encoder = JSONEncoder()
 func test() -> Void {
     do {
         let data = try encoder.encode(kitten)
-        let dic = try JSONSerialization.jsonObject(with: data, options: [])
+        let _ = try JSONSerialization.jsonObject(with: data, options: [])
     } catch  {
         print("errpr")
     }

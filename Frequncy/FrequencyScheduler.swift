@@ -11,7 +11,7 @@ import Foundation
 let userDefault = UserDefaults.standard
 public typealias TQNextTimeQueryHandler = () -> Double
 
-public class TQFrequencyTool: NSObject {
+public class FrequencyScheduler: NSObject {
 
     static public var frequencyDatas = [String: Frequncy]()
     static public func queryFrequencyStatus<Object>(frequcy: Object) -> Bool where Object: FrequncySaveAble, Object: FrequncyAble {
@@ -22,36 +22,50 @@ public class TQFrequencyTool: NSObject {
     }
     
     static public func handlerFrequencyStatus<Object>(frequcy: Object) where Object: FrequncySaveAble, Object: FrequncyAble {
-       frequcy.handlePlusCurFrequncyEvent(query: nil)
+       frequcy.handlePlusCurFrequncyEvent()
         userDefault.set(frequcy.value, forKey: frequcy.saveKey)
+        userDefault.synchronize()
     }
     
 }
 
-extension TQFrequencyTool {
+extension FrequencyScheduler {
     
-    @objc static public func handlerDayFrequency(_ frequency: Int32, saveKey: String) -> Void {
-        if let model = TQFrequencyTool.frequencyDatas[saveKey] {
+    @objc static public func handlerDayFrequency(saveKey: String) -> Void {
+        if let model = FrequencyScheduler.frequencyDatas[saveKey] {
             handlerFrequencyStatus(frequcy: model)
+        } else {
+            fatalError("first call queryStatus method")
+        }
+    }
+    
+    @objc static public func queryOneDayIntervalStatus(_ frequency: Int32, saveKey: String) -> Bool {
+        if let model = FrequencyScheduler.frequencyDatas[saveKey] {
+            return queryFrequencyStatus(frequcy: model)
         } else {
             let model = Frequncy.dayFrequency(fre: frequency, type: .interval(24 * 60 * 60), saveKey: saveKey) {
                 let date = Date.init()
                 return date.nextDayDate().timeIntervalSince1970
             }
-            TQFrequencyTool.frequencyDatas[saveKey] = model
+            FrequencyScheduler.frequencyDatas[saveKey] = model
+           return queryFrequencyStatus(frequcy: model)
+        }
+    }
+    
+    @objc static public func queryNextDayStatus(_ frequency: Int32, saveKey: String) -> Bool {
+        if let model = FrequencyScheduler.frequencyDatas[saveKey] {
+            return queryFrequencyStatus(frequcy: model)
+        } else {
+            let model = Frequncy.dayFrequency(fre: frequency, type: .nextTime(Date().timeIntervalSince1970), saveKey: saveKey) {
+                let date = Date.init()
+                return date.nextDayDate().timeIntervalSince1970
+            }
+            FrequencyScheduler.frequencyDatas[saveKey] = model
+            return queryFrequencyStatus(frequcy: model)
         }
     }
 
-//    @objc static public func queryStatus(saveKey: String) -> Bool {
-//        
-//    }
-
-    @objc static public func handNextDayFrequency(_ frequency: Int32, saveKey: String) -> Void {
-        handlerFrequencyStatus(frequcy: Frequncy.dayFrequency(fre: frequency, type: .nextTime(24 * 60 * 60), saveKey: saveKey,query: { () -> Double in
-            let date = Date.init()
-            return date.nextDayDate().timeIntervalSince1970
-        }))
-    }
+    
 }
 
 extension Frequncy {
@@ -60,7 +74,7 @@ extension Frequncy {
         frequency.frequncy = fre
         frequency.type = type
         frequency.saveKey = saveKey
-        frequency.queryNextTime = query
+        frequency.queryNexttime = query
         return frequency
     }
 }

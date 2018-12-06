@@ -15,7 +15,7 @@
 		BA40BD9F21B4C35B00AA3B7C /* FrequncyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BD9E21B4C35B00AA3B7C /* FrequncyTests.swift */; };
 		BA40BDAA21B4C35B00AA3B7C /* FrequncyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDA921B4C35B00AA3B7C /* FrequncyUITests.swift */; };
 		BA40BDB921B4C36A00AA3B7C /* Frequncy.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDB721B4C36900AA3B7C /* Frequncy.swift */; };
-		BA40BDBA21B4C36A00AA3B7C /* TQFrequencyTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDB821B4C36A00AA3B7C /* TQFrequencyTool.swift */; };
+		BA40BDBA21B4C36A00AA3B7C /* FrequencyScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDB821B4C36A00AA3B7C /* FrequencyScheduler.swift */; };
 		BA40BDBC21B4C45800AA3B7C /* FrequncyAble.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDBB21B4C45800AA3B7C /* FrequncyAble.swift */; };
 		BA40BDBF21B4D3D800AA3B7C /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDBE21B4D3D800AA3B7C /* Date.swift */; };
 		BA40BDC121B5212F00AA3B7C /* Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA40BDC021B5212F00AA3B7C /* Codable.swift */; };
@@ -53,7 +53,7 @@
 		BA40BDA921B4C35B00AA3B7C /* FrequncyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequncyUITests.swift; sourceTree = "<group>"; };
 		BA40BDAB21B4C35B00AA3B7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BA40BDB721B4C36900AA3B7C /* Frequncy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frequncy.swift; sourceTree = "<group>"; };
-		BA40BDB821B4C36A00AA3B7C /* TQFrequencyTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TQFrequencyTool.swift; sourceTree = "<group>"; };
+		BA40BDB821B4C36A00AA3B7C /* FrequencyScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrequencyScheduler.swift; sourceTree = "<group>"; };
 		BA40BDBB21B4C45800AA3B7C /* FrequncyAble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrequncyAble.swift; sourceTree = "<group>"; };
 		BA40BDBE21B4D3D800AA3B7C /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		BA40BDC021B5212F00AA3B7C /* Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Codable.swift; sourceTree = "<group>"; };
@@ -107,7 +107,7 @@
 		BA40BD8821B4C35A00AA3B7C /* Frequncy */ = {
 			isa = PBXGroup;
 			children = (
-				BA40BDB821B4C36A00AA3B7C /* TQFrequencyTool.swift */,
+				BA40BDB821B4C36A00AA3B7C /* FrequencyScheduler.swift */,
 				BA40BDB721B4C36900AA3B7C /* Frequncy.swift */,
 				BA40BDBB21B4C45800AA3B7C /* FrequncyAble.swift */,
 				BA40BDBE21B4D3D800AA3B7C /* Date.swift */,
@@ -274,7 +274,7 @@
 				BA40BDBC21B4C45800AA3B7C /* FrequncyAble.swift in Sources */,
 				BA40BDBF21B4D3D800AA3B7C /* Date.swift in Sources */,
 				BA40BDB921B4C36A00AA3B7C /* Frequncy.swift in Sources */,
-				BA40BDBA21B4C36A00AA3B7C /* TQFrequencyTool.swift in Sources */,
+				BA40BDBA21B4C36A00AA3B7C /* FrequencyScheduler.swift in Sources */,
 				BA40BDC121B5212F00AA3B7C /* Codable.swift in Sources */,
 				BA40BD8C21B4C35A00AA3B7C /* ViewController.swift in Sources */,
 				BA40BD8A21B4C35A00AA3B7C /* AppDelegate.swift in Sources */,

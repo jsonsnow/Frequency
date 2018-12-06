@@ -67,10 +67,11 @@ public protocol FrequncyAble: class {
     var frequncy: Int32 {set get}
     var curFrequncy: Int32 {set get}
     var saveTime: Double {set get}
+    var queryNexttime: TQNextTimeQueryHandler? {set get}
     
     func nextTime() -> Double
     func canShow() -> Bool
-    func handlePlusCurFrequncyEvent(query: TQNextTimeQueryHandler?)
+    func handlePlusCurFrequncyEvent()
 }
 
 extension FrequncyAble {
@@ -110,11 +111,11 @@ extension FrequncyAble {
         return false
     }
     
-    private func handlerActionWithNextTimeType(nextTime: Double, query: TQNextTimeQueryHandler) -> Void {
+    private func handlerActionWithNextTimeType(nextTime: Double) -> Void {
         curFrequncy += 1
         let cur = Date.init().timeIntervalSince1970
         if cur > nextTime {
-            self.type = .nextTime(query())
+            self.type = .nextTime(self.nextTime())
             curFrequncy = 1
         }
     }
@@ -128,24 +129,28 @@ extension FrequncyAble {
         }
     }
 
-    public func handlePlusCurFrequncyEvent(query: TQNextTimeQueryHandler?)  {
+    public func handlePlusCurFrequncyEvent()  {
         switch type {
         case .interval(let interval):
-            if saveTime == 0 {
+            if curFrequncy == 0 {
                 self.saveTime = Date.init().timeIntervalSince1970
             }
             handlerActionWithIntervalType(interval: interval)
         case .nextTime(var nextTime):
-            if curFrequncy == 1 {
-                nextTime = Date.init().timeIntervalSince1970
+            if curFrequncy == 0 {
+                nextTime = self.nextTime()
                 self.type = .nextTime(nextTime)
             }
-            handlerActionWithNextTimeType(nextTime: nextTime, query: query ?? self.nextTime)
+            handlerActionWithNextTimeType(nextTime: nextTime)
         }
     }
     
     public func nextTime() -> Double {
-        assert(false, "nextTime error")
+        if let next = queryNexttime {
+            self.type = .nextTime(next())
+            return next()
+        }
+        return 0
     }
 }
 

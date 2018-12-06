@@ -10,7 +10,6 @@ import Foundation
 
 public class Frequncy: NSObject, FrequncyAble, FrequncySaveAble  {
     
-
     //MARK: - FrequncyAble
     public var type: FrequncyType = .interval(24 * 60 * 60)
     
@@ -20,7 +19,8 @@ public class Frequncy: NSObject, FrequncyAble, FrequncySaveAble  {
     
     public var saveTime: Double = 0.0
     
-    public var queryNextTime: TQNextTimeQueryHandler?
+    public var queryNexttime: TQNextTimeQueryHandler?
+    
     
     //MARK: - FrequncySaveAble
     public var saveKey: String = ""

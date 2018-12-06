@@ -12,6 +12,8 @@ import XCTest
 class FrequncyTests: XCTestCase {
 
     override func setUp() {
+       
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
@@ -20,8 +22,33 @@ class FrequncyTests: XCTestCase {
     }
 
     func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        userDefault.removeObject(forKey: "test1")
+        assert(FrequencyScheduler.queryNextDayStatus(3, saveKey: "test1"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test1")
+        assert(FrequencyScheduler.queryNextDayStatus(3, saveKey: "test1"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test1")
+        assert(FrequencyScheduler.queryNextDayStatus(3, saveKey: "test1"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test1")
+       
+    }
+    
+    func testnextDay1() -> Void {
+        assert(FrequencyScheduler.queryNextDayStatus(3, saveKey: "test1"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test1")
+    }
+    
+    func testDayInterval() {
+        userDefault.removeObject(forKey: "test2")
+        assert(FrequencyScheduler.queryOneDayIntervalStatus(3, saveKey: "test2"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test2")
+        assert(FrequencyScheduler.queryOneDayIntervalStatus(3, saveKey: "test2"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test2")
+        assert(FrequencyScheduler.queryOneDayIntervalStatus(3, saveKey: "test2"))
+        FrequencyScheduler.handlerDayFrequency(saveKey: "test2")
+    }
+    
+    func testDayInterval1() -> Void {
+        assert(FrequencyScheduler.queryOneDayIntervalStatus(3, saveKey: "test2"))
     }
 
     func testPerformanceExample() {

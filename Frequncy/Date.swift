@@ -17,7 +17,7 @@ extension Date {
     /// - Returns: next day date
     public func nextDayDate() -> Date {
         var nextDay = self.addingTimeInterval(24 * 60 * 60)
-        var components = dateComponents(self)
+        var components = dateComponents(nextDay)
         components.hour = 0
         components.minute = 0
         components.second = 0
@@ -121,6 +121,6 @@ extension Date {
     }
     
     public func dateComponents(_ date: Date) -> DateComponents {
-       return _calendar.dateComponents(Set.init([Calendar.Component.year,Calendar.Component.month,Calendar.Component.day]), from: self)
+       return _calendar.dateComponents(Set.init([Calendar.Component.year,Calendar.Component.month,Calendar.Component.day]), from: date)
     }
 }
